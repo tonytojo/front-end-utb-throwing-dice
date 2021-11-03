@@ -1,17 +1,42 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import Dice from './Dice';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+class App extends React.Component {
+  state = { dice: null,  errorMessage: "" };
+  numArr = ['',0,0,0,0,0,0];
+  componentDidMount() {
+    this.start();
+  }
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  start() {
+    setInterval(() => {
+      this.throwDice(1, 6);
+    }, 1000);
+  }
+
+  throwDice(min, max) {
+    const number =  Math.floor(Math.random() * (max - min + 1) + min);
+    this.numArr[number]++;
+
+    this.setState({
+      dice : "dice" +  number + ".png",
+      });
+      
+  }
+  // Efter return( lägger jag en <> taggar... </>
+  render() {
+
+    if(this.state.dice !== null)
+        return <Dice dice= {this.state.dice} result = {this.numArr} />
+
+    return (
+      <div className="colour-box">
+        <h1 className="title">Waiting on timer</h1>
+      </div>
+    );
+  } //end render
+} //end App class
+
+ReactDOM.render(<App />, document.querySelector("#root"));
